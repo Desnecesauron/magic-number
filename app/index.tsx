@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../hooks/useTheme';
 import { strings } from '../i18n/pt';
 import { radius, shadows, spacing, typography } from '../theme';
-import { GameMode, GAME_MODES } from '../lib/game';
+import { GameMode } from '../lib/game';
 
 const MODES: { mode: GameMode; label: string; desc: string; timed: boolean }[] = [
   { mode: 'easy', label: strings.menu.modes.easy, desc: strings.menu.modeDesc.easy, timed: false },

@@ -10,6 +10,7 @@ import {
   Text,
   TextInput,
   View,
+  Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -26,6 +27,8 @@ import { PrimaryButton } from '../components/PrimaryButton';
 import { strings } from '../i18n/pt';
 import { radius, shadows, spacing, typography } from '../theme';
 import { GameMode, GAME_MODES, isTimedMode, validateGuess } from '../lib/game';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const MODE_LABELS: Record<GameMode, string> = {
   easy: strings.menu.modes.easy,
@@ -260,7 +263,7 @@ export default function GameScreen() {
           {showConfetti && (
             <ConfettiCannon
               count={180}
-              origin={{ x: 200, y: -10 }}
+              origin={{ x: SCREEN_WIDTH / 2, y: -10 }}
               autoStart
               fadeOut
             />
