@@ -20,6 +20,7 @@ import ConfettiCannon from 'react-native-confetti-cannon';
 import { useGame } from '../hooks/useGame';
 import { useTheme } from '../hooks/useTheme';
 import { useSettings } from '../context/SettingsContext';
+import { useSound } from '../hooks/useSound';
 import { GuessCard } from '../components/GuessCard';
 import { MagicDisplay } from '../components/MagicDisplay';
 import { TimerRing } from '../components/TimerRing';
@@ -46,6 +47,7 @@ export default function GameScreen() {
 
   const { colors } = useTheme();
   const { haptics } = useSettings();
+  const { playCorrect, playWrong, playWin, playTimeout } = useSound();
 
   const { state, start, guess, reveal, reset } = useGame(mode);
 
@@ -55,13 +57,16 @@ export default function GameScreen() {
   const [showConfetti, setShowConfetti] = useState(false);
   const inputRef = useRef<TextInput>(null);
 
-  // Trigger confetti on win
+  // Trigger confetti + sound on win; sound on timeout
   useEffect(() => {
     if (state.status === 'won') {
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 4000);
+      playWin();
+    } else if (state.status === 'lost') {
+      playTimeout();
     }
-  }, [state.status]);
+  }, [state.status]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Start non-timed game immediately
   useEffect(() => {
@@ -82,12 +87,12 @@ export default function GameScreen() {
     setInput('');
 
     const result = guess(value);
-    if (haptics) {
-      if (result === 'correct') {
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      } else {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      }
+    if (result === 'correct') {
+      if (haptics) Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      playCorrect();
+    } else {
+      if (haptics) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      playWrong();
     }
 
     // Keep focus on input for quick re-guessing
