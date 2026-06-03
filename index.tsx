@@ -1,6 +1,7 @@
 import { registerRootComponent } from 'expo';
 import { ExpoRoot } from 'expo-router';
 import React from 'react';
+import './lib/sounds'; // start loading sounds immediately at bundle time
 
 // Required for Expo Router on SDK 54 with custom entry point.
 // Using require.context instead of expo-router/entry avoids

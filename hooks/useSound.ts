@@ -1,25 +1,18 @@
-import { useAudioPlayer } from 'expo-audio';
 import { useSettings } from '../context/SettingsContext';
+import { playSound } from '../lib/sounds';
 
-// Each hook call creates one player bound to one source.
-// seekTo(0) rewinds before play so rapid re-triggers work correctly.
 export function useSound() {
   const { sound } = useSettings();
 
-  const correctPlayer = useAudioPlayer(require('../assets/sounds/correct.wav'));
-  const wrongPlayer   = useAudioPlayer(require('../assets/sounds/wrong.wav'));
-  const winPlayer     = useAudioPlayer(require('../assets/sounds/win.wav'));
-  const timeoutPlayer = useAudioPlayer(require('../assets/sounds/timeout.wav'));
-
-  function play(player: ReturnType<typeof useAudioPlayer>) {
+  function play(key: Parameters<typeof playSound>[0]) {
     if (!sound) return;
-    player.seekTo(0).then(() => player.play());
+    playSound(key); // async, fire-and-forget
   }
 
   return {
-    playCorrect: () => play(correctPlayer),
-    playWrong:   () => play(wrongPlayer),
-    playWin:     () => play(winPlayer),
-    playTimeout: () => play(timeoutPlayer),
+    playCorrect: () => play('correct'),
+    playWrong:   () => play('wrong'),
+    playWin:     () => play('win'),
+    playTimeout: () => play('timeout'),
   };
 }

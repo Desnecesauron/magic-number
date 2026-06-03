@@ -89,7 +89,7 @@ export default function GameScreen() {
     const result = guess(value);
     if (result === 'correct') {
       if (haptics) Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      playCorrect();
+      // win.wav é tocado pelo useEffect quando status === 'won'
     } else {
       if (haptics) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       playWrong();
